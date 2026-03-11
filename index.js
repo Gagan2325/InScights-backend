@@ -32,6 +32,16 @@ app.use(morgan('dev'));
 // ── Routes
 app.use('/api/generate', limiter, generateRoute);
 
+app.get('/',(req, res)=>{
+  res.json({
+    status: 'ok',
+    service: 'Brandcare InScights API',
+    version: '1.0.0',
+    timestamp: new Date().toISOString()
+  });
+  
+})
+
 // ── Health check
 app.get('/api/health', (req, res) => {
   res.json({
