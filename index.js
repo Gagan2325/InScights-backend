@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3001;
 // ── Security middleware
 app.use(helmet());
 app.use(cors({
-  origin: *,
+  origin: "*",
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
