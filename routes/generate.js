@@ -13,6 +13,7 @@ const briefSchema = Joi.object({
   competitor: Joi.string().max(100).allow('').optional(),
   competitorBrand: Joi.string().max(100).allow('').optional(),
   contentBrief: Joi.string().min(20).max(2000).required(),
+  negativePrompt: Joi.string().max(1000).allow('').optional(),
 
   // Generation toggles
   generateBehavioural: Joi.boolean().default(true),
@@ -26,7 +27,7 @@ const briefSchema = Joi.object({
 
   // Filters
   region: Joi.string().max(50).optional(),
-  yearFrom: Joi.number().integer().min(1990).max(2025).optional(),
+  yearFrom: Joi.number().integer().min(1990).max(2030).optional(),
   audience: Joi.string().max(50).optional(),
   tone: Joi.string().max(50).optional(),
   pairsRequested: Joi.number().integer().min(1).max(8).default(4)

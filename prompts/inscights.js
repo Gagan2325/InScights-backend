@@ -57,10 +57,12 @@ function buildGenerationPrompt(brief) {
     competitor,
     competitorBrand,
     contentBrief,
+    negativePrompt,
     generateBehavioural,
     generateClinical,
     generateSolutionFor,
     generateSolutionVs,
+    usePublishedLiterature = true,
     region,
     yearFrom,
     audience,
@@ -90,14 +92,18 @@ BRAND DETAILS:
 
 CONTENT BRIEF:
 "${contentBrief}"
-
+${negativePrompt ? `
+NEGATIVE PROMPT (strictly avoid the following in all generated content):
+"${negativePrompt}"
+` : ''}
 PARAMETERS:
 - Need Statement Types to generate: ${needTypes.join(', ') || 'both behavioural and clinical'}
 - Solution Statement Types to generate: ${solutionTypes.join(', ') || 'in_favour'}
-- Region priority: ${region || 'India (primary), Global (secondary)'}
+- Region priority: ${region === 'Asia-Pacific' ? 'Asia-Pacific (prefer Asian/Indian/East-Asian population data; include Japanese, Korean, Chinese, Thai, Singaporean studies)' : region === 'Global' ? 'Global (no regional preference; use best available evidence worldwide)' : 'India (primary), Global (secondary)'}
 - Study year filter: ${yearFrom || '2015'} to present (landmark trials exempt)
-- Target audience: ${audience || 'HCP Specialist'}
-- Tone: ${tone || 'Clinical'}
+- Evidence sources: ${usePublishedLiterature ? 'Published literature (PubMed, Lancet, NEJM, JAPI, JAMA, BMJ, Cochrane) — cite real studies with full citation details' : 'Do NOT cite published literature. Use only internal/brand data or general knowledge. Omit citations array or leave empty.'}
+- Target audience: ${audience || 'HCP Specialist'}${audience === 'Patient' ? ' — use plain language, avoid jargon, explain medical terms, focus on patient outcomes and quality of life' : audience === 'HCP (GP)' ? ' — balance clinical depth with practical prescribing relevance for primary care' : ' — use full clinical/scientific terminology appropriate for specialists'}
+- Tone: ${tone || 'Clinical'}${tone === 'Conversational' ? ' — warm, direct, approachable language suitable for detailing or peer discussions' : tone === 'Educational' ? ' — structured, explanatory style with context-setting for learning purposes' : ' — formal, evidence-led, data-forward'}
 - Number of paired sets to generate: ${pairsRequested}
 
 OUTPUT SCHEMA — return ONLY this JSON structure:
